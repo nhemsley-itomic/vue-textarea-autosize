@@ -25,6 +25,14 @@ export default {
       type: [Number],
       'default': null
     },
+    minWidth: {
+      type: Number,
+      'default': 10
+    },
+    maxWidth: {
+      type: Number,
+      'default': null
+    },
     /*
      * Force !important for style properties
      */
@@ -48,7 +56,9 @@ export default {
       return {
         resize: !this.isResizeImportant ? 'none' : 'none !important',
         height: this.height,
+        width: this.width,
         overflow: this.maxHeightScroll ? 'auto' : (!this.isOverflowImportant ? 'hidden' : 'hidden !important')
+
       }
     },
     isResizeImportant () {
@@ -62,7 +72,12 @@ export default {
     isHeightImportant () {
       const imp = this.important
       return imp === true || (Array.isArray(imp) && imp.includes('height'))
-    }
+    },
+    isWidthImportant () {
+      const imp = this.important
+      return imp === true || (Array.isArray(imp) && imp.includes('width'))
+    },
+    
   },
   watch: {
     value (val) {
@@ -104,6 +119,23 @@ export default {
 
         const heightVal = contentHeight + 'px'
         this.height = `${heightVal}${important ? ' !important' : ''}`
+      })
+
+      const widthImportant = this.isWidthImportant ? 'important' : ''
+
+      this.$nextTick(() => {
+        let lengths = this.val.split("\n").map((line) => line.length)
+        let longest = Math.max(...lengths)
+
+        var width = Math.max(longest, this.minWidth)
+        if (this.maxWidth !== null) 
+          width = Math.min(longest, this.maxWidth)
+
+        const widthVal = (width+1) + 'ex'
+        // eslint-disable-next-line
+        console.log(widthVal)
+        this.width = `${widthVal}${widthImportant ? ' !important' : ''}`
+
       })
 
       return this
