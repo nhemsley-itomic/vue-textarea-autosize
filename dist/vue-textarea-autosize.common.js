@@ -153,9 +153,13 @@ var script = {
           return line.length;
         });
 
-        var longest = Math.max.apply(Math, _toConsumableArray(lengths));
-        var width = Math.max(longest, _this.minWidth);
-        if (_this.maxWidth !== null) width = Math.min(longest, _this.maxWidth);
+        var width = Math.max.apply(Math, _toConsumableArray(lengths));
+
+        if (_this.maxWidth !== null) {
+          width = Math.min(width, _this.maxWidth);
+        }
+
+        width = Math.max(width, _this.minWidth);
         var widthVal = width + 1 + 'ex'; // eslint-disable-next-line
 
         console.log(widthVal);

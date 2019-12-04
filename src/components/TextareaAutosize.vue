@@ -125,11 +125,13 @@ export default {
 
       this.$nextTick(() => {
         let lengths = this.val.split("\n").map((line) => line.length)
-        let longest = Math.max(...lengths)
+        var width = Math.max(...lengths)
 
-        var width = Math.max(longest, this.minWidth)
-        if (this.maxWidth !== null) 
-          width = Math.min(longest, this.maxWidth)
+        if (this.maxWidth !== null) {
+          width = Math.min(width, this.maxWidth)
+        }
+
+        width = Math.max(width, this.minWidth)
 
         const widthVal = (width+1) + 'ex'
         // eslint-disable-next-line
