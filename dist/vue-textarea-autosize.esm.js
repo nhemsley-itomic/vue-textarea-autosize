@@ -3,6 +3,26 @@
  * (c) 2019 Saymon
  * Released under the MIT License.
  */
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+}
+
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr)) {
+    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+
+    return arr2;
+  }
+}
+
+function _iterableToArray(iter) {
+  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+}
+
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance");
+}
+
 //
 //
 //
@@ -29,6 +49,14 @@ var script = {
       type: [Number],
       'default': null
     },
+    minWidth: {
+      type: Number,
+      'default': 10
+    },
+    maxWidth: {
+      type: Number,
+      'default': null
+    },
 
     /*
      * Force !important for style properties
@@ -53,6 +81,7 @@ var script = {
       return {
         resize: !this.isResizeImportant ? 'none' : 'none !important',
         height: this.height,
+        width: this.width,
         overflow: this.maxHeightScroll ? 'auto' : !this.isOverflowImportant ? 'hidden' : 'hidden !important'
       };
     },
@@ -67,6 +96,10 @@ var script = {
     isHeightImportant: function isHeightImportant() {
       var imp = this.important;
       return imp === true || Array.isArray(imp) && imp.includes('height');
+    },
+    isWidthImportant: function isWidthImportant() {
+      var imp = this.important;
+      return imp === true || Array.isArray(imp) && imp.includes('width');
     }
   },
   watch: {
@@ -111,6 +144,20 @@ var script = {
 
         var heightVal = contentHeight + 'px';
         _this.height = "".concat(heightVal).concat(important ? ' !important' : '');
+      });
+      var widthImportant = this.isWidthImportant ? 'important' : '';
+      this.$nextTick(function () {
+        var lengths = _this.val.split("\n").map(function (line) {
+          return line.length;
+        });
+
+        var longest = Math.max.apply(Math, _toConsumableArray(lengths));
+        var width = Math.max(longest, _this.minWidth);
+        if (_this.maxWidth !== null) width = Math.min(longest, _this.maxWidth);
+        var widthVal = width + 1 + 'ex'; // eslint-disable-next-line
+
+        console.log(widthVal);
+        _this.width = "".concat(widthVal).concat(widthImportant ? ' !important' : '');
       });
       return this;
     }
